@@ -310,6 +310,6 @@ func deleteTimelineItem(r *http.Request, svc *mirror.Service) string {
 	err := svc.Timeline.Delete(itemId).Do()
 	if err != nil {
 		return fmt.Sprintf("An error occurred: %v\n", err)
-    }
-    return "A timeline item has been deleted."
+	}
+	return "A timeline item has been deleted."
 }
