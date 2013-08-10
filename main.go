@@ -85,6 +85,10 @@ func rootHandler(w http.ResponseWriter, r *http.Request) error {
 		http.Redirect(w, r, "/auth", http.StatusFound)
 		return nil
 	}
+	if err = t.Refresh(); err != nil { // Check for valid credentials.
+		http.Redirect(w, r, "/auth", http.StatusFound)
+		return nil
+	}
 	svc, err := mirror.New(t.Client())
 	if err != nil {
 		return fmt.Errorf("Unable to create Mirror service: %s", err)
