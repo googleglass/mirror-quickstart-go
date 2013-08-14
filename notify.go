@@ -112,30 +112,15 @@ func handleTimelineNotification(c appengine.Context, svc *mirror.Service, not *m
 		if err != nil {
 			return fmt.Errorf("Unable to retrieve timeline item: %s", err)
 		}
-		nt := &mirror.TimelineItem{
-			Text:         fmt.Sprintf("Echoing your shared item: %s", t.Text),
-			Notification: &mirror.NotificationConfig{Level: "DEFAULT"},
+		// We could have just updated the Text attribute in-place and used the
+		// Update method instead, but we wanted to illustrate the Patch method
+		// here.
+		patch := &mirror.TimelineItem{
+			Text: fmt.Sprintf("Go Quick Start got your photo! %s", t.Text),
 		}
-		tic := svc.Timeline.Insert(nt)
-		if t.Attachments != nil && len(t.Attachments) > 0 {
-			a, err := svc.Timeline.Attachments.Get(t.Id, t.Attachments[0].Id).Do()
-			if err != nil {
-				return fmt.Errorf("Unable to retrieve attachment metadata: %s", err)
-			}
-			req, err := http.NewRequest("GET", a.ContentUrl, nil)
-			if err != nil {
-				return fmt.Errorf("Unable to create new HTTP request: %s", err)
-			}
-			resp, err := transport.RoundTrip(req)
-			if err != nil {
-				return fmt.Errorf("Unable to retrieve attachment content: %s", err)
-			}
-			defer resp.Body.Close()
-			tic.Media(resp.Body)
-		}
-		_, err = tic.Do()
+		_, err = svc.Timeline.Patch(not.ItemId, patch).Do()
 		if err != nil {
-			return fmt.Errorf("Unable to insert timeline item: %s", err)
+			return fmt.Errorf("Unable to patch timeline item: %s", err)
 		}
 	}
 	return nil

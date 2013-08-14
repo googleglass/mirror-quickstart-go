@@ -20,22 +20,9 @@ limitations under the License.
   <title>Glassware Starter Project</title>
   <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet"
         media="screen">
-
-  <style>
-    .button-icon {
-      max-width: 75px;
-    }
-
-    .tile {
-      border-left: 1px solid #444;
-      padding: 5px;
-      list-style: none;
-    }
-
-    .btn {
-      width: 100%;
-    }
-  </style>
+  <link href="/static/bootstrap/css/bootstrap-responsive.min.css"
+        rel="stylesheet" media="screen">
+  <link href="/static/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
 <div class="navbar navbar-inverse navbar-fixed-top">
@@ -48,57 +35,68 @@ limitations under the License.
           <button type="submit" class="btn">Sign out</button>
         </form>
       </div>
-      <!--/.nav-collapse -->
     </div>
   </div>
 </div>
 
 <div class="container">
 
+  {{ if .Message }}
+  <div class="alert alert-info">{{ .Message }}</div>
+  {{ end }}
+
   <!-- Main hero unit for a primary marketing message or call to action -->
-  <div class="hero-unit">
-    <h1>Your Recent Timeline</h1>
-    {{ if .Message }}
-    <span class="label label-warning">Message: {{ .Message }}</span>
-    {{ end }}
+  <h1>Your Recent Timeline</h1>
+  <div class="row">
 
     <div style="margin-top: 5px;">
       {{ range $item := .TimelineItems }}
-      <ul class="span3 tile">
-        <li><strong>ID: </strong> {{ $item.Id }}
-        </li>
-        <li>
-          <strong>Text: </strong> {{ $item.Text }}
-        </li>
-        <li>
-          <strong>HTML: </strong> {{ $item.Html }}
-        </li>
-        <li>
-          <strong>Attachments: </strong>
-
-
-          {{ range $item.Attachments }}
-            {{ if HasPrefix .ContentType "image" }}
-            <img src="/attachmentproxy?attachment={{ .Id }}&timelineItem={{ $item.Id }}" width="150">
-            {{ else }}
-            <a href="/attachmentproxy?attachment={{ .Id }}&timelineItem={{ $item.Id }}">Download</a>
-            {{ end }}
-          {{ end }}
-        </li>
-	<li>
-          <form action="/" method="post">
-            <input type="hidden" name="itemId" value="{{ $item.Id }}">
-            <input type="hidden" name="operation" value="deleteTimelineItem">
-            <button class="btn" type="submit">Delete Item</button>
-          </form>
-        </li>
-      </ul>
+      <div class="span4">
+        <table class="table table-bordered">
+          <tbody>
+            <tr>
+              <th>ID</th>
+              <td>{{ $item.Id }}</td>
+            </tr>
+            <tr>
+              <th>Text</th>
+              <td>{{ $item.Text }}</td>
+            </tr>
+            <tr>
+              <th>HTML</th>
+              <td>{{ $item.Html }}</td>
+            </tr>
+            <tr>
+              <th>Attachments</th>
+              <td>
+                {{ range $item.Attachments }}
+                  {{ if HasPrefix .ContentType "image" }}
+                  <img src="/attachmentproxy?attachment={{ .Id }}&timelineItem={{ $item.Id }}" width="150">
+                  {{ else }}
+                  <a href="/attachmentproxy?attachment={{ .Id }}&timelineItem={{ $item.Id }}">Download</a>
+                  {{ end }}
+                {{ end }}
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <form class="form-inline" action="/" method="post">
+                  <input type="hidden" name="itemId" value="{{ $item.Id }}">
+                  <input type="hidden" name="operation"
+                         value="deleteTimelineItem">
+                  <button class="btn btn-danger btn-block" type="submit">
+                    Delete Item
+                  </button>
+                </form>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       {{ end }}
     </div>
-    <div style="clear:both;"></div>
   </div>
 
-  <!-- Example row of columns -->
   <div class="row">
     <div class="span4">
       <h2>Timeline</h2>
@@ -106,13 +104,14 @@ limitations under the License.
       <p>When you first sign in, this Glassware inserts a welcome message. Use
         these controls to insert more items into your timeline. Learn more about
         the timeline APIs
-        <a href="https://developers.google.com/glass/timeline">here</a></p>
-
+        <a href="https://developers.google.com/glass/timeline">here</a>.</p>
 
       <form action="/" method="post">
         <input type="hidden" name="operation" value="insertItem">
-        <textarea name="message">Hello World!</textarea><br/>
-        <button class="btn" type="submit">The above message</button>
+        <textarea name="message" class="span4">Hello World!</textarea><br/>
+        <button class="btn btn-block" type="submit">
+          Insert the above message
+        </button>
       </form>
 
       <form action="/" method="post">
@@ -123,19 +122,22 @@ limitations under the License.
                value="/static/images/saturn-eclipse.jpg">
         <input type="hidden" name="contentType" value="image/jpeg">
 
-        <button class="btn" type="submit">A picture
-          <img class="button-icon"
-               src="/static/images/saturn-eclipse.jpg">
+        <button class="btn btn-block" type="submit">Insert a picture
+          <img class="button-icon" src="/static/images/saturn-eclipse.jpg">
         </button>
       </form>
       <form action="/" method="post">
         <input type="hidden" name="operation" value="insertItemWithAction">
-        <button class="btn" type="submit">A card you can reply to</button>
+        <button class="btn btn-block" type="submit">
+          Insert a card you can reply to
+        </button>
       </form>
       <hr>
       <form action="/" method="post">
         <input type="hidden" name="operation" value="insertItemAllUsers">
-        <button class="btn" type="submit">A card to all users</button>
+        <button class="btn btn-block" type="submit">
+          Insert a card to all users
+        </button>
       </form>
 
     </div>
@@ -147,22 +149,22 @@ limitations under the License.
       <a href="https://developers.google.com/glass/contacts">here</a>.</p>
 
       {{ if .Contact }}
-      <form class="span3" action="/"
-            method="post">
+      <form action="/" method="post">
         <input type="hidden" name="operation" value="deleteContact">
         <input type="hidden" name="id" value="Go Quick Start">
-        <button class="btn" type="submit">Delete Go Quick Start Contact
+        <button class="btn btn-block btn-danger" type="submit">
+          Delete Go Quick Start Contact
         </button>
       </form>
       {{ else }}
-      <form class="span3" action="/"
-            method="post">
+      <form action="/" method="post">
         <input type="hidden" name="operation" value="insertContact">
         <input type="hidden" name="imageUrl"
                value="/static/images/gopher.png">
         <input type="hidden" name="name"
                value="Go Quick Start">
-        <button class="btn" type="submit">Insert Go Quick Start Contact
+        <button class="btn btn-block btn-success" type="submit">
+          Insert Go Quick Start Contact
         </button>
       </form>
       {{ end }}
@@ -171,43 +173,49 @@ limitations under the License.
     <div class="span4">
       <h2>Subscriptions</h2>
 
-      <p>By default a subscription is inserted for changes to the
+      <p>
+        By default a subscription is inserted for changes to the
         <code>timeline</code> collection. Learn more about subscriptions
-        <a href="https://developers.google.com/glass/subscriptions">here</a></p>
+        <a href="https://developers.google.com/glass/subscriptions">here</a>.
+      </p>
 
-      <p class="label label-info">Note: Subscriptions require SSL. <br>They will not work on localhost.</p>
+      <div class="alert alert-info">
+        Note: Subscriptions require SSL. They will not work on localhost.
+      </div>
 
       {{ if .TimelineSubscriptionExists }}
-      <form action="/"
-            method="post">
+      <form action="/" method="post">
         <input type="hidden" name="subscriptionId" value="timeline">
         <input type="hidden" name="operation" value="deleteSubscription">
-        <button class="btn" type="submit" class="delete">Unsubscribe from
-          timeline updates
+        <button class="btn btn-block btn-danger" type="submit">
+          Unsubscribe from timeline updates
         </button>
       </form>
       {{ else }}
       <form action="/" method="post">
         <input type="hidden" name="operation" value="insertSubscription">
         <input type="hidden" name="collection" value="timeline">
-        <button class="btn" type="submit">Subscribe to timeline updates</button>
+        <button class="btn btn-block btn-success" type="submit">
+          Subscribe to timeline updates
+        </button>
       </form>
       {{ end }}
 
       {{ if .LocationSubscriptionExists }}
-      <form action="/"
-            method="post">
+      <form action="/" method="post">
         <input type="hidden" name="subscriptionId" value="locations">
         <input type="hidden" name="operation" value="deleteSubscription">
-        <button class="btn" type="submit" class="delete">Unsubscribe from
-          location updates
+        <button class="btn btn-block btn-danger" type="submit">
+          Unsubscribe from location updates
         </button>
       </form>
       {{ else }}
       <form action="/" method="post">
         <input type="hidden" name="operation" value="insertSubscription">
         <input type="hidden" name="collection" value="locations">
-        <button class="btn" type="submit">Subscribe to location updates</button>
+        <button class="btn btn-block btn-success" type="submit">
+          Subscribe to location updates
+        </button>
       </form>
       {{ end }}
     </div>
