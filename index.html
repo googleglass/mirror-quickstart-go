@@ -50,48 +50,57 @@ limitations under the License.
   <div class="row">
 
     <div style="margin-top: 5px;">
-      {{ range $item := .TimelineItems }}
-      <div class="span4">
-        <table class="table table-bordered">
-          <tbody>
-            <tr>
-              <th>ID</th>
-              <td>{{ $item.Id }}</td>
-            </tr>
-            <tr>
-              <th>Text</th>
-              <td>{{ $item.Text }}</td>
-            </tr>
-            <tr>
-              <th>HTML</th>
-              <td>{{ $item.Html }}</td>
-            </tr>
-            <tr>
-              <th>Attachments</th>
-              <td>
-                {{ range $item.Attachments }}
-                  {{ if HasPrefix .ContentType "image" }}
-                  <img src="/attachmentproxy?attachment={{ .Id }}&timelineItem={{ $item.Id }}" width="150">
-                  {{ else }}
-                  <a href="/attachmentproxy?attachment={{ .Id }}&timelineItem={{ $item.Id }}">Download</a>
+      {{ if .TimelineItems }}
+        {{ range $item := .TimelineItems }}
+        <div class="span4">
+          <table class="table table-bordered">
+            <tbody>
+              <tr>
+                <th>ID</th>
+                <td>{{ $item.Id }}</td>
+              </tr>
+              <tr>
+                <th>Text</th>
+                <td>{{ $item.Text }}</td>
+              </tr>
+              <tr>
+                <th>HTML</th>
+                <td>{{ $item.Html }}</td>
+              </tr>
+              <tr>
+                <th>Attachments</th>
+                <td>
+                  {{ range $item.Attachments }}
+                    {{ if HasPrefix .ContentType "image" }}
+                    <img src="/attachmentproxy?attachment={{ .Id }}&timelineItem={{ $item.Id }}" width="150">
+                    {{ else }}
+                    <a href="/attachmentproxy?attachment={{ .Id }}&timelineItem={{ $item.Id }}">Download</a>
+                    {{ end }}
                   {{ end }}
-                {{ end }}
-              </td>
-            </tr>
-            <tr>
-              <td colspan="2">
-                <form class="form-inline" action="/" method="post">
-                  <input type="hidden" name="itemId" value="{{ $item.Id }}">
-                  <input type="hidden" name="operation"
-                         value="deleteTimelineItem">
-                  <button class="btn btn-danger btn-block" type="submit">
-                    Delete Item
-                  </button>
-                </form>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2">
+                  <form class="form-inline" action="/" method="post">
+                    <input type="hidden" name="itemId" value="{{ $item.Id }}">
+                    <input type="hidden" name="operation"
+                           value="deleteTimelineItem">
+                    <button class="btn btn-danger btn-block" type="submit">
+                      Delete Item
+                    </button>
+                  </form>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        {{ end }}
+      {{ else }}
+      <div class="span12">
+        <div class="alert alert-info">
+          You haven't added any items to your timeline yet. Use the controls
+          below to add something!
+        </div>
       </div>
       {{ end }}
     </div>
