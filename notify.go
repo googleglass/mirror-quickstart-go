@@ -88,8 +88,9 @@ func handleLocationsNotification(c appengine.Context, svc *mirror.Service, not *
 	if err != nil {
 		return fmt.Errorf("Unable to retrieve location: %s", err)
 	}
+	text := fmt.Sprintf("Go Quick Start says you are at %f by %f.", l.Latitude, l.Longitude)
 	t := &mirror.TimelineItem{
-		Text:         fmt.Sprintf("New location is %f, %f", l.Latitude, l.Longitude),
+		Text:         text,
 		Location:     l,
 		MenuItems:    []*mirror.MenuItem{&mirror.MenuItem{Action: "NAVIGATE"}},
 		Notification: &mirror.NotificationConfig{Level: "DEFAULT"},
