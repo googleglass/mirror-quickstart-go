@@ -56,7 +56,7 @@ var operations = map[string]func(*http.Request, *mirror.Service) string{
 	"insertContact":        insertContact,
 	"deleteContact":        deleteContact,
 	"deleteTimelineItem":   deleteTimelineItem,
-    "deleteAllTimelineItems":   deleteAllTimelineItems,
+  "deleteAllTimelineItems":   deleteAllTimelineItems,
 }
 
 // Because App Engine owns main and starts the HTTP service,
