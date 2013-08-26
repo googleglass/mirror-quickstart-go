@@ -56,6 +56,7 @@ var operations = map[string]func(*http.Request, *mirror.Service) string{
 	"insertContact":        insertContact,
 	"deleteContact":        deleteContact,
 	"deleteTimelineItem":   deleteTimelineItem,
+    "deleteAllTimelineItems":   deleteAllTimelineItems,
 }
 
 // Because App Engine owns main and starts the HTTP service,
@@ -313,3 +314,19 @@ func deleteTimelineItem(r *http.Request, svc *mirror.Service) string {
 	}
 	return "A timeline item has been deleted."
 }
+
+// deleteAllTimelineItems deletes all timeline items.
+func deleteAllTimelineItems(r *http.Request, svc *mirror.Service) string {
+  timelineItems, err := svc.Timeline.List().Do()
+  if err != nil {
+    return fmt.Sprintf("An error occurred: %v\n", err)
+  }
+  for _, t := range timelineItems.Items {			
+    err := svc.Timeline.Delete(t.Id).Do()
+    if err != nil {
+      return fmt.Sprintf("An error occurred: %v\n", err)
+    }
+  }
+  return "All timeline items have been deleted."
+}
+
