@@ -48,15 +48,15 @@ var rootTmpl = template.Must(template.New("index.html").
 
 // Map of operations to functions.
 var operations = map[string]func(*http.Request, *mirror.Service) string{
-	"insertSubscription":   insertSubscription,
-	"deleteSubscription":   deleteSubscription,
-	"insertItem":           insertItem,
-	"insertItemWithAction": insertItemWithAction,
-	"insertItemAllUsers":   insertItemAllUsers,
-	"insertContact":        insertContact,
-	"deleteContact":        deleteContact,
-	"deleteTimelineItem":   deleteTimelineItem,
-  "deleteAllTimelineItems":   deleteAllTimelineItems,
+	"insertSubscription":     insertSubscription,
+	"deleteSubscription":     deleteSubscription,
+	"insertItem":             insertItem,
+	"insertItemWithAction":   insertItemWithAction,
+	"insertItemAllUsers":     insertItemAllUsers,
+	"insertContact":          insertContact,
+	"deleteContact":          deleteContact,
+	"deleteTimelineItem":     deleteTimelineItem,
+	"deleteAllTimelineItems": deleteAllTimelineItems,
 }
 
 // Because App Engine owns main and starts the HTTP service,
@@ -317,16 +317,15 @@ func deleteTimelineItem(r *http.Request, svc *mirror.Service) string {
 
 // deleteAllTimelineItems deletes all timeline items.
 func deleteAllTimelineItems(r *http.Request, svc *mirror.Service) string {
-  timelineItems, err := svc.Timeline.List().Do()
-  if err != nil {
-    return fmt.Sprintf("An error occurred: %v\n", err)
-  }
-  for _, t := range timelineItems.Items {			
-    err := svc.Timeline.Delete(t.Id).Do()
-    if err != nil {
-      return fmt.Sprintf("An error occurred: %v\n", err)
-    }
-  }
-  return "All timeline items have been deleted."
+	timelineItems, err := svc.Timeline.List().Do()
+	if err != nil {
+		return fmt.Sprintf("An error occurred: %v\n", err)
+	}
+	for _, t := range timelineItems.Items {
+		err := svc.Timeline.Delete(t.Id).Do()
+		if err != nil {
+			return fmt.Sprintf("An error occurred: %v\n", err)
+		}
+	}
+	return "All timeline items have been deleted."
 }
-
