@@ -148,7 +148,11 @@ limitations under the License.
           Insert a card to all users
         </button>
       </form>
-
+      <form action="/" method="post">
+        <input type="hidden" name="operation" value="deleteAllTimelineItems">
+        <button class="btn" type="submit">Delete All Timeline Items</button>
+        <input type="hidden" name="contentType" value="image/png">
+      </form>
     </div>
 
     <div class="span4">
