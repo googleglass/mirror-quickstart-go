@@ -81,9 +81,18 @@ func userID(r *http.Request) (string, error) {
 
 // storeCredential stores the user's credentials in the datastore.
 func storeCredential(c appengine.Context, userID string, token *oauth.Token) error {
+
+    simple := new(SimpleToken)
+    simple.AccessToken = token.AccessToken
+    simple.RefreshToken = token.RefreshToken
+    simple.Expiry = token.Expiry
+
 	// Store the tokens in the datastore.
 	key := datastore.NewKey(c, "OAuth2Token", userID, 0, nil)
-	_, err := datastore.Put(c, key, token)
+	_, err := datastore.Put(c, key, simple)
+
+	c.Errorf("DATASTORE ERROR: %s", err)
+
 	return err
 }
 

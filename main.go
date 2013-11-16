@@ -65,6 +65,12 @@ func init() {
 	http.HandleFunc("/", errorAdapter(rootHandler))
 }
 
+type SimpleToken struct {
+	AccessToken  string
+	RefreshToken string
+	Expiry       time.Time         // If zero the token has no (known) expiry time.
+}
+
 // root is the main handler.
 func rootHandler(w http.ResponseWriter, r *http.Request) error {
 	if r.URL.Path != "/" { // Only supports request on "/", ignore the rest.
