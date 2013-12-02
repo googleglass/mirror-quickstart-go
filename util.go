@@ -18,7 +18,7 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
-
+	"time"
 	"code.google.com/p/goauth2/oauth"
 	"github.com/gorilla/sessions"
 
@@ -29,6 +29,12 @@ import (
 
 // Cookie store used to store the user's ID in the current session.
 var store = sessions.NewCookieStore([]byte(secret))
+
+type SimpleToken struct {
+	AccessToken  string
+	RefreshToken string
+	Expiry       time.Time         // If zero the token has no (known) expiry time.
+}
 
 // OAuth2.0 configuration variables.
 func config(host string) *oauth.Config {
@@ -90,8 +96,6 @@ func storeCredential(c appengine.Context, userID string, token *oauth.Token) err
 	// Store the tokens in the datastore.
 	key := datastore.NewKey(c, "OAuth2Token", userID, 0, nil)
 	_, err := datastore.Put(c, key, simple)
-
-	c.Errorf("DATASTORE ERROR: %s", err)
 
 	return err
 }
