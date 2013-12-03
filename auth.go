@@ -77,7 +77,7 @@ func oauth2callbackHandler(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	if err = storeCredential(c, userId, tok); err != nil {
-		return fmt.Errorf("Unable to store user ID: %s", err)
+		return fmt.Errorf("Unable to store credentials: %s", err)
 	}
 
 	bootstrapUser(r, t.Client(), userId)
