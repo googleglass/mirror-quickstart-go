@@ -15,12 +15,12 @@
 package quickstart
 
 import (
+	"code.google.com/p/goauth2/oauth"
+	"github.com/gorilla/sessions"
 	"net/http"
 	"net/url"
 	"strings"
 	"time"
-	"code.google.com/p/goauth2/oauth"
-	"github.com/gorilla/sessions"
 
 	"appengine"
 	"appengine/datastore"
@@ -33,7 +33,7 @@ var store = sessions.NewCookieStore([]byte(secret))
 type SimpleToken struct {
 	AccessToken  string
 	RefreshToken string
-	Expiry       time.Time         // If zero the token has no (known) expiry time.
+	Expiry       time.Time // If zero the token has no (known) expiry time.
 }
 
 // OAuth2.0 configuration variables.
@@ -87,11 +87,10 @@ func userID(r *http.Request) (string, error) {
 
 // storeCredential stores the user's credentials in the datastore.
 func storeCredential(c appengine.Context, userID string, token *oauth.Token) error {
-
-    simple := new(SimpleToken)
-    simple.AccessToken = token.AccessToken
-    simple.RefreshToken = token.RefreshToken
-    simple.Expiry = token.Expiry
+	simple := new(SimpleToken)
+	simple.AccessToken = token.AccessToken
+	simple.RefreshToken = token.RefreshToken
+	simple.Expiry = token.Expiry
 
 	// Store the tokens in the datastore.
 	key := datastore.NewKey(c, "OAuth2Token", userID, 0, nil)
