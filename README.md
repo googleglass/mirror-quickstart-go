@@ -14,9 +14,8 @@ Otherwise, read on to see how to deploy your own version.
 
 ## Prerequisites
 
-[The App Engine SDK for Go](/appengine/downloads#Google_App_Engine_SDK_for_Go) -
-The Go quick start project is implemented using App Engine. You need
-the Go App Engine SDK to develop and deploy your project.
+The Go quick start project is implemented using [App Engine](https://developers.google.com/appengine/)>. 
+You need the Go App Engine SDK to develop and deploy your project.
 Run the installer if appropriate for your platform, or extract the zip file
 in a convenient place.
 
